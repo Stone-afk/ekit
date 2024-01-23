@@ -160,6 +160,7 @@ func NewOnDemandBlockTaskPool(initGo int, queueSize int, opts ...option.Option[O
 		maxIdleTime: defaultMaxIdleTime,
 	}
 	ctx := context.Background()
+
 	b.interruptCtx, b.interruptCtxCancel = context.WithCancel(ctx)
 	atomic.StoreInt32(&b.state, stateCreated)
 
@@ -363,7 +364,6 @@ func (b *OnDemandBlockTaskPool) goroutine(id int) {
 				}
 				return
 			}
-
 			// todo handle error
 			atomic.AddInt32(&b.numGoRunningTasks, 1)
 			_ = task.Run(b.interruptCtx)
