@@ -80,6 +80,10 @@ func (s *AdaptiveTimeoutRetryStrategy) getFailed() int {
 }
 
 func NewAdaptiveTimeoutRetryStrategy(strategy Strategy, bufferLen, threshold int) *AdaptiveTimeoutRetryStrategy {
+	// 将 bufferLen 调整为 8 的整数倍
+	if bufferLen%8 != 0 {
+		bufferLen = ((bufferLen / 8) + 1) * 8
+	}
 	return &AdaptiveTimeoutRetryStrategy{
 		strategy:   strategy,
 		threshold:  threshold,
